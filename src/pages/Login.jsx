@@ -2,12 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, User } from 'lucide-react';
 
-interface LoginProps {
-  setIsLoggedIn: (value: boolean) => void;
-  setUser: (user: any) => void;
-}
-
-const Login: React.FC<LoginProps> = ({ setIsLoggedIn, setUser }) => {
+const Login = ({ setIsLoggedIn, setUser }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -17,11 +12,11 @@ const Login: React.FC<LoginProps> = ({ setIsLoggedIn, setUser }) => {
     confirmPassword: ''
   });
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     // Mock authentication
     const userData = {

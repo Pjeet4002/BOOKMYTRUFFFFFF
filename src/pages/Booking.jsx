@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, Clock, Users, CreditCard, Check } from 'lucide-react';
 
-const Booking: React.FC = () => {
+const Booking = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
@@ -31,11 +31,11 @@ const Booking: React.FC = () => {
     '20:00 - 21:00', '21:00 - 22:00'
   ];
 
-  const handleInputChange = (field: string, value: string | number) => {
+  const handleInputChange = (field, value) => {
     setBookingData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (step < 3) {
       setStep(step + 1);

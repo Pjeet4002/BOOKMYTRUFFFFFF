@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { MapPin, Clock, Star, Users, Wifi, Car, Camera, Shield } from 'lucide-react';
 
-const TurfDetails: React.FC = () => {
+const TurfDetails = () => {
   const { id } = useParams();
   const [selectedImage, setSelectedImage] = useState(0);
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, Clock, MapPin, Star, CreditCard, User, Settings } from 'lucide-react';
 
-const Dashboard: React.FC = () => {
+const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('bookings');
 
   const upcomingBookings = [

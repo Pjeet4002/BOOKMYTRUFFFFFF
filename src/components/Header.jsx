@@ -2,13 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, User, LogOut } from 'lucide-react';
 
-interface HeaderProps {
-  isLoggedIn: boolean;
-  user: any;
-  setIsLoggedIn: (value: boolean) => void;
-}
-
-const Header: React.FC<HeaderProps> = ({ isLoggedIn, user, setIsLoggedIn }) => {
+const Header = ({ isLoggedIn, user, setIsLoggedIn }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
 

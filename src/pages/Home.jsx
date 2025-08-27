@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, MapPin, Clock, Star, Users, Zap, Shield } from 'lucide-react';
 
-const Home: React.FC = () => {
+const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const featuredTurfs = [
