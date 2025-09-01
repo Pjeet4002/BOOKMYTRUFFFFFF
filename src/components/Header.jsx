@@ -2,14 +2,39 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, User, LogOut } from 'lucide-react';
 
-const Header = ({ isLoggedIn, user, setIsLoggedIn }) => {
+const Header = ({ 
+  isLoggedIn, 
+  user, 
+  setIsLoggedIn, 
+  isAdminLoggedIn, 
+  admin, 
+  setIsAdminLoggedIn,
+  isOwnerLoggedIn,
+  owner,
+  setIsOwnerLoggedIn
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
+  const handleLogout = (userType = 'customer') => {
+    if (userType === 'admin') {
+      setIsAdminLoggedIn(false);
+    } else if (userType === 'owner') {
+      setIsOwnerLoggedIn(false);
+    } else {
+      setIsLoggedIn(false);
+    }
     setIsMenuOpen(false);
   };
+
+  const getCurrentUser = () => {
+    if (isAdminLoggedIn) return { type: 'admin', data: admin };
+    if (isOwnerLoggedIn) return { type: 'owner', data: owner };
+    if (isLoggedIn) return { type: 'customer', data: user };
+    return null;
+  };
+
+  const currentUser = getCurrentUser();
 
   return (
     <header className="bg-white shadow-lg sticky top-0 z-50">
@@ -60,17 +85,33 @@ const Header = ({ isLoggedIn, user, setIsLoggedIn }) => {
 
           {/* Desktop Auth */}
           <div className="hidden md:flex items-center space-x-4">
-            {isLoggedIn ? (
+            {currentUser ? (
               <div className="flex items-center space-x-4">
+                {currentUser.type === 'admin' && (
+                  <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
+                    Admin
+                  </span>
+                )}
+                {currentUser.type === 'owner' && (
+                  <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                    Turf Owner
+                  </span>
+                )}
                 <Link
-                  to="/dashboard"
+                  to={
+                    currentUser.type === 'admin' 
+                      ? '/admin/dashboard' 
+                      : currentUser.type === 'owner'
+                      ? '/turf-owner/dashboard'
+                      : '/dashboard'
+                  }
                   className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:text-green-600 transition-colors duration-200"
                 >
                   <User className="w-5 h-5" />
                   <span>Dashboard</span>
                 </Link>
                 <button
-                  onClick={handleLogout}
+                  onClick={() => handleLogout(currentUser.type)}
                   className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:text-red-600 transition-colors duration-200"
                 >
                   <LogOut className="w-5 h-5" />
@@ -78,12 +119,26 @@ const Header = ({ isLoggedIn, user, setIsLoggedIn }) => {
                 </button>
               </div>
             ) : (
-              <Link
-                to="/login"
-                className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200"
-              >
-                Login
-              </Link>
+              <div className="flex items-center space-x-3">
+                <Link
+                  to="/login"
+                  className="text-gray-700 hover:text-green-600 transition-colors duration-200"
+                >
+                  Customer Login
+                </Link>
+                <Link
+                  to="/turf-owner/login"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                >
+                  Turf Owner
+                </Link>
+                <Link
+                  to="/admin/login"
+                  className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors duration-200"
+                >
+                  Admin
+                </Link>
+              </div>
             )}
           </div>
 
@@ -128,30 +183,52 @@ const Header = ({ isLoggedIn, user, setIsLoggedIn }) => {
               >
                 Contact
               </Link>
-              {isLoggedIn ? (
+              {currentUser ? (
                 <>
                   <Link
-                    to="/dashboard"
+                    to={
+                      currentUser.type === 'admin' 
+                        ? '/admin/dashboard' 
+                        : currentUser.type === 'owner'
+                        ? '/turf-owner/dashboard'
+                        : '/dashboard'
+                    }
                     className="block px-4 py-2 text-gray-700 hover:text-green-600 hover:bg-gray-50 rounded-md"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Dashboard
                   </Link>
                   <button
-                    onClick={handleLogout}
+                    onClick={() => handleLogout(currentUser.type)}
                     className="block w-full text-left px-4 py-2 text-gray-700 hover:text-red-600 hover:bg-gray-50 rounded-md"
                   >
                     Logout
                   </button>
                 </>
               ) : (
-                <Link
-                  to="/login"
-                  className="block px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Login
-                </Link>
+                <div className="space-y-2">
+                  <Link
+                    to="/login"
+                    className="block px-4 py-2 text-gray-700 hover:text-green-600 hover:bg-gray-50 rounded-md"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Customer Login
+                  </Link>
+                  <Link
+                    to="/turf-owner/login"
+                    className="block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Turf Owner
+                  </Link>
+                  <Link
+                    to="/admin/login"
+                    className="block px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Admin
+                  </Link>
+                </div>
               )}
             </div>
           </div>
