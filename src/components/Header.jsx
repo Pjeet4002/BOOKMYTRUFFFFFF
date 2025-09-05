@@ -122,21 +122,9 @@ const Header = ({
               <div className="flex items-center space-x-3">
                 <Link
                   to="/login"
-                  className="text-gray-700 hover:text-green-600 transition-colors duration-200"
+                  className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 font-medium"
                 >
-                  Customer Login
-                </Link>
-                <Link
-                  to="/turf-owner/login"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200"
-                >
-                  Turf Owner
-                </Link>
-                <Link
-                  to="/admin/login"
-                  className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors duration-200"
-                >
-                  Admin
+                  Login
                 </Link>
               </div>
             )}
@@ -206,29 +194,13 @@ const Header = ({
                   </button>
                 </>
               ) : (
-                <div className="space-y-2">
-                  <Link
-                    to="/login"
-                    className="block px-4 py-2 text-gray-700 hover:text-green-600 hover:bg-gray-50 rounded-md"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Customer Login
-                  </Link>
-                  <Link
-                    to="/turf-owner/login"
-                    className="block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Turf Owner
-                  </Link>
-                  <Link
-                    to="/admin/login"
-                    className="block px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Admin
-                  </Link>
-                </div>
+                <Link
+                  to="/login"
+                  className="block px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Login
+                </Link>
               )}
             </div>
           </div>

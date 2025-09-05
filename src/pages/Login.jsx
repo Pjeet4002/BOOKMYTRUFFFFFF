@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, User } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Lock, Eye, EyeOff, User, Shield, Building } from 'lucide-react';
 
-const Login = ({ setIsLoggedIn, setUser }) => {
+const Login = ({ setIsLoggedIn, setUser, setIsAdminLoggedIn, setAdmin, setIsOwnerLoggedIn, setOwner }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    role: 'customer',
+    businessName: '',
+    phone: ''
   });
 
   const handleInputChange = (field, value) => {
@@ -18,15 +22,61 @@ const Login = ({ setIsLoggedIn, setUser }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Mock authentication
-    const userData = {
-      id: 1,
-      name: formData.name || 'John Doe',
-      email: formData.email,
-    };
-    setUser(userData);
-    setIsLoggedIn(true);
-    // In real app, redirect to dashboard or previous page
+    
+    // Mock authentication based on role
+    if (formData.role === 'admin') {
+      const adminData = {
+        id: 1,
+        name: formData.name || 'Admin User',
+        email: formData.email,
+        role: 'admin'
+      };
+      setAdmin(adminData);
+      setIsAdminLoggedIn(true);
+      navigate('/admin/dashboard');
+    } else if (formData.role === 'owner') {
+      const ownerData = {
+        id: 1,
+        name: formData.name || 'Turf Owner',
+        email: formData.email,
+        businessName: formData.businessName || 'Sports Arena Ltd.',
+        phone: formData.phone || '+91 98765 43210'
+      };
+      setOwner(ownerData);
+      setIsOwnerLoggedIn(true);
+      navigate('/turf-owner/dashboard');
+    } else {
+      const userData = {
+        id: 1,
+        name: formData.name || 'John Doe',
+        email: formData.email,
+      };
+      setUser(userData);
+      setIsLoggedIn(true);
+      navigate('/dashboard');
+    }
+  };
+
+  const getRoleIcon = (role) => {
+    switch (role) {
+      case 'admin':
+        return <Shield className="w-5 h-5 text-red-600" />;
+      case 'owner':
+        return <Building className="w-5 h-5 text-blue-600" />;
+      default:
+        return <User className="w-5 h-5 text-green-600" />;
+    }
+  };
+
+  const getRoleColor = (role) => {
+    switch (role) {
+      case 'admin':
+        return 'border-red-500 bg-red-50';
+      case 'owner':
+        return 'border-blue-500 bg-blue-50';
+      default:
+        return 'border-green-500 bg-green-50';
+    }
   };
 
   return (
@@ -45,14 +95,79 @@ const Login = ({ setIsLoggedIn, setUser }) => {
             </h1>
             <p className="text-gray-600">
               {isLogin 
-                ? 'Sign in to book your favorite turfs in Visnagar' 
-                : 'Join BookMyTurf and start booking amazing sports facilities'
+                ? 'Sign in to access your account' 
+                : 'Join BookMyTurf and start your journey'
               }
             </p>
           </div>
 
           <div className="bg-white rounded-xl shadow-lg p-8">
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Role Selection */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Select Your Role
+                </label>
+                <div className="grid grid-cols-1 gap-3">
+                  <label className={`flex items-center p-3 border-2 rounded-lg cursor-pointer transition-all ${
+                    formData.role === 'customer' ? getRoleColor('customer') : 'border-gray-200 hover:border-gray-300'
+                  }`}>
+                    <input
+                      type="radio"
+                      value="customer"
+                      checked={formData.role === 'customer'}
+                      onChange={(e) => handleInputChange('role', e.target.value)}
+                      className="sr-only"
+                    />
+                    <div className="flex items-center space-x-3">
+                      {getRoleIcon('customer')}
+                      <div>
+                        <div className="font-medium text-gray-900">Customer</div>
+                        <div className="text-sm text-gray-600">Book turfs and play sports</div>
+                      </div>
+                    </div>
+                  </label>
+
+                  <label className={`flex items-center p-3 border-2 rounded-lg cursor-pointer transition-all ${
+                    formData.role === 'owner' ? getRoleColor('owner') : 'border-gray-200 hover:border-gray-300'
+                  }`}>
+                    <input
+                      type="radio"
+                      value="owner"
+                      checked={formData.role === 'owner'}
+                      onChange={(e) => handleInputChange('role', e.target.value)}
+                      className="sr-only"
+                    />
+                    <div className="flex items-center space-x-3">
+                      {getRoleIcon('owner')}
+                      <div>
+                        <div className="font-medium text-gray-900">Turf Owner</div>
+                        <div className="text-sm text-gray-600">List and manage your turfs</div>
+                      </div>
+                    </div>
+                  </label>
+
+                  <label className={`flex items-center p-3 border-2 rounded-lg cursor-pointer transition-all ${
+                    formData.role === 'admin' ? getRoleColor('admin') : 'border-gray-200 hover:border-gray-300'
+                  }`}>
+                    <input
+                      type="radio"
+                      value="admin"
+                      checked={formData.role === 'admin'}
+                      onChange={(e) => handleInputChange('role', e.target.value)}
+                      className="sr-only"
+                    />
+                    <div className="flex items-center space-x-3">
+                      {getRoleIcon('admin')}
+                      <div>
+                        <div className="font-medium text-gray-900">Administrator</div>
+                        <div className="text-sm text-gray-600">Manage platform operations</div>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
               {!isLogin && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -68,6 +183,39 @@ const Login = ({ setIsLoggedIn, setUser }) => {
                     required={!isLogin}
                   />
                 </div>
+              )}
+
+              {!isLogin && formData.role === 'owner' && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <Building className="w-4 h-4 inline mr-2" />
+                      Business Name
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.businessName}
+                      onChange={(e) => handleInputChange('businessName', e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+                      placeholder="Enter your business name"
+                      required={!isLogin && formData.role === 'owner'}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => handleInputChange('phone', e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+                      placeholder="+91 98765 43210"
+                      required={!isLogin && formData.role === 'owner'}
+                    />
+                  </div>
+                </>
               )}
 
               <div>
@@ -135,6 +283,31 @@ const Login = ({ setIsLoggedIn, setUser }) => {
                   <Link to="/forgot-password" className="text-sm text-green-600 hover:text-green-700">
                     Forgot password?
                   </Link>
+                </div>
+              )}
+
+              {!isLogin && formData.role === 'owner' && (
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <h4 className="font-medium text-blue-900 mb-2">Benefits of Joining as Turf Owner</h4>
+                  <ul className="text-sm text-blue-800 space-y-1">
+                    <li>• Reach thousands of sports enthusiasts</li>
+                    <li>• Easy booking management system</li>
+                    <li>• Secure payment processing</li>
+                    <li>• Real-time analytics and insights</li>
+                    <li>• 24/7 customer support</li>
+                  </ul>
+                </div>
+              )}
+
+              {!isLogin && formData.role === 'admin' && (
+                <div className="bg-red-50 p-4 rounded-lg">
+                  <div className="flex items-center space-x-2">
+                    <Shield className="w-5 h-5 text-red-600" />
+                    <span className="text-sm font-medium text-red-900">Administrator Access</span>
+                  </div>
+                  <p className="text-sm text-red-800 mt-1">
+                    Admin registration requires approval. Contact support for access.
+                  </p>
                 </div>
               )}
 
