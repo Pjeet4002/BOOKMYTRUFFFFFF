@@ -38,11 +38,18 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/turf/:id" element={<TurfDetails />} />
           <Route path="/booking/:id" element={<Booking />} />
-          <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} />
+          <Route path="/login" element={
+            <Login 
+              setIsLoggedIn={setIsLoggedIn} 
+              setUser={setUser}
+              setIsAdminLoggedIn={setIsAdminLoggedIn}
+              setAdmin={setAdmin}
+              setIsOwnerLoggedIn={setIsOwnerLoggedIn}
+              setOwner={setOwner}
+            />
+          } />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/admin/login" element={<AdminLogin setIsAdminLoggedIn={setIsAdminLoggedIn} setAdmin={setAdmin} />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/turf-owner/login" element={<TurfOwnerLogin setIsOwnerLoggedIn={setIsOwnerLoggedIn} setOwner={setOwner} />} />
           <Route path="/turf-owner/dashboard" element={<TurfOwnerDashboard />} />
         </Routes>
         <Footer />
